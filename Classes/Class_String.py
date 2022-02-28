@@ -2,7 +2,7 @@ from Classes.Class_Encrypted_Image import EncryptedImage
 from Functions.rectangular_str import rectangular_str
 from Functions.image_add import img_add_list_2d
 from Functions.Encription.first_encription import *
-
+#импорт нужных классов и функций
 
 class String:
 	def __init__(self, chars="", str_ascii=None, str_unicode=None, str_hex_color=None, full_img=None):

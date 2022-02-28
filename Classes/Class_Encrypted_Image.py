@@ -4,11 +4,9 @@ from Functions.list_2d_to_1d import *
 from Functions.Encription.first_encription import *
 
 class EncryptedImage:
-	def __init__(self, image, key1=1, key2=1123, hex_colors:dict=None, full_str:str=None):
+	def __init__(self, image, full_str:str=None):
 		#конструктор
 		self.image = image
-		self.key1 = key1
-		self.key2 = key2
 		self.width, self.height = image.size # Из кортежа берет значения height и width
 		self.full_str = full_str
 
@@ -16,11 +14,7 @@ class EncryptedImage:
 		plaintext = str(self.decode())
 		return plaintext
 
-
-
-
-
-	def img_splitting_2d(self):
+	def img_splitting_2d(self): #данная функциявозвращает 2d список картинок для раскодирования
 		repeats = (self.width//5, self.height//5)
 		rows = []
 		imgs_2d = [] #Итоговый двумерный список картинок из ячеек 5х5
@@ -49,14 +43,14 @@ class EncryptedImage:
 			singles = []
 		return imgs_2d #массив из списков клеток каждого ряда в картинке
 	
-	def img_in_1d(self):
+	def img_in_1d(self): #Перевод двумерного списка картинок в одномерный
 		list_imgs_2d = self.img_splitting_2d()
 		list_imgs_1d = []
 
 		for i in list_imgs_2d:
 			list_imgs_1d.extend(i) #Перевод 2D списка в 1D без расшифровки
 		#Раскодировка шифра Цезаря начинается
-		list_imgs_1d = EncryptedImage.decryption_list(list_imgs_1d, self.key1)
+		list_imgs_1d = EncryptedImage.decryption_list(list_imgs_1d)
 		#Раскодировка шифра Цезаря заканчивается
 		print(len(list_imgs_1d), " img_in_1d ")
 		return list_imgs_1d
@@ -68,7 +62,7 @@ class EncryptedImage:
 		#Дешифровка закодированного списка картинок 
 		return image_list #Возвращает раскодированный список картинок
 	
-	def create_encrypted_colors(self):
+	def create_encrypted_colors(self): #Получение закодированных цветов
 		img_1d = list_2d_to_1d(self.img_splitting_2d())
 		#encrypted_colors = [RGB_to_pillow_hex(self.i.getpixel(pixel)) for i in img_1d]
 		encrypted_colors = []
@@ -80,11 +74,11 @@ class EncryptedImage:
 				encrypted_colors.remove(i)
 
 		return encrypted_colors
-	def decode(self):
+	def decode(self): #Функция раскодирования
 		encrypted_colors = self.create_encrypted_colors()
 
 		list_values = [archashing(i) for i in encrypted_colors]
-
+		#Из-за неточности сигмоидной функции придётся заменить некоторые символы с помощью if-ов
 		for i in range(len(list_values)):
 			if list_values[i] == ord("䑒"):
 				list_values[i] = ord("a")
@@ -125,14 +119,8 @@ class EncryptedImage:
 
 		self.plaintext = ""
 
-		chars_list = [chr(i) for i in list_values]
-		full_str = self.plaintext.join(i for i in chars_list)
+		chars_list = [chr(i) for i in list_values] #Генератор списка ссимволов
+		full_str = self.plaintext.join(i for i in chars_list) #создание получившейся строки
 
-		full_str.replace("䑒", "a")
-		full_str.replace("䔾", "b")
-		full_str = full_str[:len(full_str)]
-
-		while full_str[-1] == " ":
-			full_str = full_str[:len(full_str)-1]
 		self.plain_text = full_str
-		return self.plain_text
+		return self.plain_text #Возвращает раскодированную строку

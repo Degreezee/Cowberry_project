@@ -18,12 +18,12 @@ def img_add_v(img1, img2=None):
 		img_new.paste(img2, (0, img1.height))
 		return img_new
 
-def img_add_h_with_color(img1, img2=None, c=None):
+def img_add_h_with_color(img1, img2=None, c=None): #Добавление картинки по горизонтали с заполнением недостающих символов
 	if img2 is None:
 		return img1
 	else:
 		if c is None:
-			c = "#000000"
+			c = "#000000" #Если не получилось сделать прямоугольник, то оставшееся пространство по горизонтали заполнится черным цветом
 		else:
 			c = c
 		img_new = IMG.new("RGB", (img1.width + img2.width, max(img1.height, img2.height)), color=c)
@@ -31,12 +31,12 @@ def img_add_h_with_color(img1, img2=None, c=None):
 		img_new.paste(img2, (img1.width, 0))
 		return img_new
 
-def img_add_v_with_color(img1, img2, c=None):
+def img_add_v_with_color(img1, img2, c=None): #Добавление картинки по вертикали с заполнением недостающих символов
 	if img2 is None:
 		return img1
 	else:
 		if c is None:
-			c = "#fcd1cc"
+			c = "#fcd1cc" #Если не получилось сделать прямоугольник, то оставшееся пространство по горизонтали заполнится светло-розовым цветом
 		else:
 			c = c
 		img_new = IMG.new("RGB", (max(img1.width, img2.width), img1.height + img2.height), color=c)
@@ -45,13 +45,13 @@ def img_add_v_with_color(img1, img2, c=None):
 	return img_new
 
 
-def img_add_h_list(img_list):
+def img_add_h_list(img_list): #Соединение изображений в списке по горизонтали
 	cumulative_img = img_list.pop(0)
 	while not img_list == []:
 		cumulative_img = img_add_h(cumulative_img, img_list.pop(0))
 	return cumulative_img
 
-def img_add_v_list(img_list):
+def img_add_v_list(img_list): #Соединение изображений в списке по вертикали
 	cumulative_img = img_list.pop(0)
 	while not img_list == []:
 		cumulative_img = img_add_v(cumulative_img, img_list.pop(0))
@@ -69,7 +69,7 @@ def img_black_h(img_list, total_num_img):
 	
 	return [IMG.new("RGB", size=(5, 5), color="#000000")] * repeats
 
-def img_add_list_2d(img_2d_list):
+def img_add_list_2d(img_2d_list): #Соединение изображений в 2d списке
 	img_cols = []
 	maxi = 0
 	for row in img_2d_list:
